@@ -1,0 +1,7 @@
+[package]
+name = "silica-stm32f207"
+version = "0.1.0"
+authors = ["ithinuel <ithinuel@gmail.com>"]
+
+[dependencies]
+silica-stm32f2xx = { path = "../silica-stm32f2xx" }
