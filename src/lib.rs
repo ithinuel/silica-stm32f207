@@ -1,9 +1,10 @@
 #![no_std]
+#![feature(drop_types_in_const)]
 
 extern crate silica_stm32f2xx;
 
 pub use silica_stm32f2xx::*;
-pub use silica_stm32f2xx::rcc::*;
+use silica_stm32f2xx::rcc::*;
 
 pub const PERIPH_BASE: usize = 0x40000000;
 pub const APB1PERIPH_BASE: usize = PERIPH_BASE;
@@ -80,69 +81,81 @@ pub const RNG_BASE: usize = AHB2PERIPH_BASE + 0x60800;
 
 pub const FSMC_BASE: usize = AHB3PERIPH_BASE;
 
-pub const RCC: *mut rcc::RCCRegisters = RCC_BASE as *mut rcc::RCCRegisters;
-pub const FLASH: *mut flash::FlashRegisters = FLASH_BASE as *mut flash::FlashRegisters;
+pub const RCC_REGISTERS: *mut rcc::RCCRegisters = RCC_BASE as *mut rcc::RCCRegisters;
+pub const FLASH_REGISTERS: *mut flash::FlashRegisters = FLASH_BASE as *mut flash::FlashRegisters;
 
-pub const GPIOA: *mut gpio::PortRegisters = GPIOA_BASE as *mut gpio::PortRegisters;
-pub const GPIOB: *mut gpio::PortRegisters = GPIOB_BASE as *mut gpio::PortRegisters;
-pub const GPIOC: *mut gpio::PortRegisters = GPIOC_BASE as *mut gpio::PortRegisters;
-pub const GPIOD: *mut gpio::PortRegisters = GPIOD_BASE as *mut gpio::PortRegisters;
-pub const GPIOE: *mut gpio::PortRegisters = GPIOE_BASE as *mut gpio::PortRegisters;
-pub const GPIOF: *mut gpio::PortRegisters = GPIOF_BASE as *mut gpio::PortRegisters;
-pub const GPIOG: *mut gpio::PortRegisters = GPIOG_BASE as *mut gpio::PortRegisters;
-pub const GPIOH: *mut gpio::PortRegisters = GPIOH_BASE as *mut gpio::PortRegisters;
-pub const GPIOI: *mut gpio::PortRegisters = GPIOI_BASE as *mut gpio::PortRegisters;
+pub const GPIO_A_REGISTERS: *mut gpio::PortRegisters = GPIOA_BASE as *mut gpio::PortRegisters;
+pub const GPIO_B_REGISTERS: *mut gpio::PortRegisters = GPIOB_BASE as *mut gpio::PortRegisters;
+pub const GPIO_C_REGISTERS: *mut gpio::PortRegisters = GPIOC_BASE as *mut gpio::PortRegisters;
+pub const GPIO_D_REGISTERS: *mut gpio::PortRegisters = GPIOD_BASE as *mut gpio::PortRegisters;
+pub const GPIO_E_REGISTERS: *mut gpio::PortRegisters = GPIOE_BASE as *mut gpio::PortRegisters;
+pub const GPIO_F_REGISTERS: *mut gpio::PortRegisters = GPIOF_BASE as *mut gpio::PortRegisters;
+pub const GPIO_G_REGISTERS: *mut gpio::PortRegisters = GPIOG_BASE as *mut gpio::PortRegisters;
+pub const GPIO_H_REGISTERS: *mut gpio::PortRegisters = GPIOH_BASE as *mut gpio::PortRegisters;
+pub const GPIO_I_REGISTERS: *mut gpio::PortRegisters = GPIOI_BASE as *mut gpio::PortRegisters;
 
-pub const USART1: *mut usart::USARTRegisters = USART1_BASE as *mut usart::USARTRegisters;
-pub const USART2: *mut usart::USARTRegisters = USART2_BASE as *mut usart::USARTRegisters;
-pub const USART3: *mut usart::USARTRegisters = USART3_BASE as *mut usart::USARTRegisters;
-pub const UART4: *mut usart::USARTRegisters = UART4_BASE as *mut usart::USARTRegisters;
-pub const UART5: *mut usart::USARTRegisters = UART5_BASE as *mut usart::USARTRegisters;
-pub const USART6: *mut usart::USARTRegisters = USART6_BASE as *mut usart::USARTRegisters;
+pub const USART_1_REGISTERS: *mut usart::USARTRegisters = USART1_BASE as *mut usart::USARTRegisters;
+pub const USART_2_REGISTERS: *mut usart::USARTRegisters = USART2_BASE as *mut usart::USARTRegisters;
+pub const USART_3_REGISTERS: *mut usart::USARTRegisters = USART3_BASE as *mut usart::USARTRegisters;
+pub const UART_4_REGISTERS: *mut usart::USARTRegisters = UART4_BASE as *mut usart::USARTRegisters;
+pub const UART_5_REGISTERS: *mut usart::USARTRegisters = UART5_BASE as *mut usart::USARTRegisters;
+pub const USART_6_REGISTERS: *mut usart::USARTRegisters = USART6_BASE as *mut usart::USARTRegisters;
 
-pub const GPIOPORTA: gpio::PortPeripheral = gpio::PortPeripheral {
-    base_address: GPIOA,
-    clock: RCCPeripheral { rcc: RCC, clock: Clock::GPIOA }
+pub const DMA_1_REGISTERS: *mut dma::DMARegisters = DMA1_BASE as *mut dma::DMARegisters;
+pub const DMA_2_REGISTERS: *mut dma::DMARegisters = DMA2_BASE as *mut dma::DMARegisters;
+
+pub static GPIO_A: gpio::PortPeripheral = gpio::PortPeripheral {
+    base_address: GPIO_A_REGISTERS,
+    clock: RCCPeripheral { rcc: RCC_REGISTERS, clock: Clock::GPIOA }
 };
-pub const GPIOPORTB: gpio::PortPeripheral = gpio::PortPeripheral {
-    base_address: GPIOB,
-    clock: RCCPeripheral { rcc: RCC, clock: Clock::GPIOB }
+pub static GPIO_B: gpio::PortPeripheral = gpio::PortPeripheral {
+    base_address: GPIO_B_REGISTERS,
+    clock: RCCPeripheral { rcc: RCC_REGISTERS, clock: Clock::GPIOB }
 };
-pub const GPIOPORTC: gpio::PortPeripheral = gpio::PortPeripheral {
-    base_address: GPIOC,
-    clock: RCCPeripheral { rcc: RCC, clock: Clock::GPIOC }
+pub static GPIO_C: gpio::PortPeripheral = gpio::PortPeripheral {
+    base_address: GPIO_C_REGISTERS,
+    clock: RCCPeripheral { rcc: RCC_REGISTERS, clock: Clock::GPIOC }
 };
-pub const GPIOPORTD: gpio::PortPeripheral = gpio::PortPeripheral {
-    base_address: GPIOD,
-    clock: RCCPeripheral { rcc: RCC, clock: Clock::GPIOD }
+pub static GPIO_D: gpio::PortPeripheral = gpio::PortPeripheral {
+    base_address: GPIO_D_REGISTERS,
+    clock: RCCPeripheral { rcc: RCC_REGISTERS, clock: Clock::GPIOD }
 };
-pub const GPIOPORTE: gpio::PortPeripheral = gpio::PortPeripheral {
-    base_address: GPIOE,
-    clock: RCCPeripheral { rcc: RCC, clock: Clock::GPIOE }
+pub static GPIO_E: gpio::PortPeripheral = gpio::PortPeripheral {
+    base_address: GPIO_E_REGISTERS,
+    clock: RCCPeripheral { rcc: RCC_REGISTERS, clock: Clock::GPIOE }
 };
-pub const GPIOPORTF: gpio::PortPeripheral = gpio::PortPeripheral {
-    base_address: GPIOF,
-    clock: RCCPeripheral { rcc: RCC, clock: Clock::GPIOF }
+pub static GPIO_F: gpio::PortPeripheral = gpio::PortPeripheral {
+    base_address: GPIO_F_REGISTERS,
+    clock: RCCPeripheral { rcc: RCC_REGISTERS, clock: Clock::GPIOF }
 };
-pub const GPIOPORTG: gpio::PortPeripheral = gpio::PortPeripheral {
-    base_address: GPIOG,
-    clock: RCCPeripheral { rcc: RCC, clock: Clock::GPIOG }
+pub static GPIO_G: gpio::PortPeripheral = gpio::PortPeripheral {
+    base_address: GPIO_G_REGISTERS,
+    clock: RCCPeripheral { rcc: RCC_REGISTERS, clock: Clock::GPIOG }
 };
-pub const GPIOPORTH: gpio::PortPeripheral = gpio::PortPeripheral {
-    base_address: GPIOH,
-    clock: RCCPeripheral { rcc: RCC, clock: Clock::GPIOH }
+pub static GPIO_H: gpio::PortPeripheral = gpio::PortPeripheral {
+    base_address: GPIO_H_REGISTERS,
+    clock: RCCPeripheral { rcc: RCC_REGISTERS, clock: Clock::GPIOH }
 };
-pub const GPIOPORTI: gpio::PortPeripheral = gpio::PortPeripheral {
-    base_address: GPIOI,
-    clock: RCCPeripheral { rcc: RCC, clock: Clock::GPIOI }
+pub static GPIO_I: gpio::PortPeripheral = gpio::PortPeripheral {
+    base_address: GPIO_I_REGISTERS,
+    clock: RCCPeripheral { rcc: RCC_REGISTERS, clock: Clock::GPIOI }
+};
+
+pub static DMA_1: dma::DMAPeripheral = dma::DMAPeripheral {
+    base_address: DMA_1_REGISTERS,
+    clock: RCCPeripheral { rcc: RCC_REGISTERS, clock: Clock::DMA1 }
+};
+pub static DMA_2: dma::DMAPeripheral = dma::DMAPeripheral {
+    base_address: DMA_2_REGISTERS,
+    clock: RCCPeripheral { rcc: RCC_REGISTERS, clock: Clock::DMA2 }
 };
 
 #[no_mangle]
 pub fn rcc_get() -> &'static mut RCCRegisters {
-    unsafe { &mut *RCC }
+    unsafe { &mut *RCC_REGISTERS }
 }
 
 #[no_mangle]
 pub fn flash_get() -> &'static mut flash::FlashRegisters {
-    unsafe { &mut *FLASH }
+    unsafe { &mut *FLASH_REGISTERS }
 }
